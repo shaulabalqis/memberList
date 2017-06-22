@@ -37,6 +37,9 @@ Email<br><br>
 <br><br><br>
 </td>
 <td width="500">
+<form action="memberListDeleteServlet" method="post">
+	<jsp:getProperty name="username"/><input type="submit" name="Hapus akun">
+</form>
 <!-- hapus akun -->
 </td>
 </tr>
