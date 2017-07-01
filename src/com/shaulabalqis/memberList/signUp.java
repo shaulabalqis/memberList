@@ -38,7 +38,10 @@ public class signUp {
 			else{
 				rs=stmt.executeQuery(commandInputDB);
 				while (rs.next()){
-					ans=ans+rs.getString("nama")+" ";
+					ans=ans+rs.getString("nama")+"|"+rs.getString("password")
+					+"|"+rs.getString("alamat")+"|"+rs.getString("tanggal lahir")
+					+"|"+rs.getString("nomor telepon")+"|"+rs.getString("email");
+					ans=ans+"\n";
 				}
 				
 				System.out.println("masuk Query");

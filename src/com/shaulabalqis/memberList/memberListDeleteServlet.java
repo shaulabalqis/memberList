@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class memberListDeleteServlet
@@ -26,28 +27,26 @@ public class memberListDeleteServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getAttribute("username");
-		memberList user=new memberList();
-    	String username = (String)request.getAttribute("username");
-    	String command="delete from dataUser where `nama`='"+username+"'";
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession s=request.getSession();
+		memberList user=(memberList) s.getAttribute("user");
+    	 String command="delete from dataUser where `nama`='"+user.getNama()+"'";
     	signUp session=new signUp();
     	try {
 			@SuppressWarnings("unused")
 			String dataUser=session.connectDB (command, user.getDriver(), user.getUrl(), user.getUser(), user.getPass(),true);
-			//request.setAttribute("username", user.getNama());
-	    	getServletContext().getRequestDispatcher("/home.jsp").forward(request, response);
+			getServletContext().getRequestDispatcher("/home.jsp").forward(request, response);
     	} 
     	catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+    		System.out.println("ClassNotFoundException: "+e.getMessage());
 		}
 	}
 

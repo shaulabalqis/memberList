@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/memberListServlet")
 public class memberListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
 	/**
 	* @see HttpServlet#HttpServlet()
 	*/
@@ -26,92 +25,59 @@ public class memberListServlet extends HttpServlet {
     * @throws ServletException 
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
     */
-    private String messageLogIn="";
     private String messageSignUp="";
-    public String getMessageLogIn() {
-		 return messageLogIn;
-	 }
-	 public String getMessageSignUp() {
-		 return messageSignUp;
-	 }
-	 private memberList user;
+    private memberList user;
 	 public memberList getUser() {
 		 return user;
 	 }
+	 
     //@SuppressWarnings("unused")
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
-    	user=new memberList();
-    	//getServletContext().getRequestDispatcher("/home.jsp");//.forward(request, response);
-    	String namaDariForm = request.getParameter("nama");
-    	String passwordDariForm = request.getParameter("password");
-    	//String messageLogIn="";
-    	try {
-			if (user.checkLogInDB(namaDariForm, passwordDariForm)==false){
-				messageLogIn="Login berhasil";
-				request.setAttribute("username", user.getNama());
-		    	getServletContext().getRequestDispatcher("/loginPage.jsp").forward(request, response);
-				//response.sendRedirect("/loginPage.jsp");
-				//do login page view here
-				}
-			else{
-				messageLogIn="Login gagal";
-				request.setAttribute("user", user);
-				getServletContext().getRequestDispatcher("/home.jsp").forward(request, response);
-				//do error login handling here
+		getServletContext().getRequestDispatcher("/home.jsp").forward(request, response);
+    		
+    }
+	
+	//@SuppressWarnings("unused")
+		protected void doPost (HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+			messageSignUp="";
+			user=new memberList();
+	    	//System.out.println("masuk post");
+	    	request.setAttribute("user", user);
+	    	request.setAttribute("messageSignUp", messageSignUp);
+	    	//getServletContext().getRequestDispatcher("/home.jsp");
+	    	String namaDariForm = request.getParameter("nama");
+	    	String passwordDariForm = request.getParameter("password");
+	    	String alamatDariForm=request.getParameter("alamat");
+	    	String tanggalLahirDariForm=request.getParameter("tanggalLahir");
+	    	String teleponDariForm=request.getParameter("telepon");
+	    	String emailDariForm=request.getParameter("email");
+	    	user.setNama(namaDariForm);
+	    	user.setPassword(passwordDariForm);
+	    	user.setAlamat(alamatDariForm);
+	    	user.setTanggalLahir(tanggalLahirDariForm);
+	    	user.setTelepon(teleponDariForm);
+	    	user.setEmail(emailDariForm);
+	    	try {
+	    		if (user.checkSignUpDB(user.getNama())==true){
+	    			user.inputDB();
+	    			messageSignUp="Pendaftaran berhasil. Silahkan log in.";
+	    		}
+	    		else{
+	    			messageSignUp="Pendaftaran gagal.";
+	    		}
+	    		System.out.println(messageSignUp);
+	    		getServletContext().getRequestDispatcher("/home.jsp").forward(request, response);
+	    	} 
+	    	catch (ClassNotFoundException e) {
+				System.out.println("ClassNotFoundException: "+e.getMessage());
 			}
-			System.out.println(messageLogIn);
-		} 
-    	catch (ClassNotFoundException e) {
-			System.out.println("ClassNotFoundException: "+e.getMessage());
-		}
-    	catch (SQLException e) {
-    		System.out.println("SQLException: "+e.getMessage());
-			System.out.println("SQLState: "+e.getSQLState());
-			System.out.println("VendorError: "+e.getErrorCode());
-		}
-    		
-    	//user.setNama(namaDariForm);
-    	//user.setPassword(passwordDariForm);
-    	//request.setAttribute("user", user);
-    	//getServletContext().getRequestDispatcher("/home.jsp").forward(request,response);
-    }
-    //@SuppressWarnings("unused")
-	protected void doPost (HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
-    	user=new memberList();
-    	request.setAttribute("user", user);
-    	getServletContext().getRequestDispatcher("/home.jsp").forward(request,response);
-    	String namaDariForm = request.getParameter("nama");
-    	String passwordDariForm = request.getParameter("password");
-    	String alamatDariForm=request.getParameter("alamat");
-    	String tanggalLahirDariForm=request.getParameter("tanggalLahir");
-    	String teleponDariForm=request.getParameter("telepon");
-    	String emailDariForm=request.getParameter("email");
-    	user.setNama(namaDariForm);
-    	user.setPassword(passwordDariForm);
-    	user.setAlamat(alamatDariForm);
-    	user.setTanggalLahir(tanggalLahirDariForm);
-    	user.setTelepon(teleponDariForm);
-    	user.setEmail(emailDariForm);
-    	//String messageSignUp="";
-    	try {
-    		System.out.println(user.getNama());
-    		if (user.checkSignUpDB(user.getNama())==true){
-    			user.inputDB();
-    			messageSignUp="Pendaftaran berhasil";
-    		}
-    		else
-    			messageSignUp="Pendaftaran gagal";
-    		
-		} 
-    	catch (ClassNotFoundException e) {
-			System.out.println("ClassNotFoundException: "+e.getMessage());
-		}
-    	catch (SQLException e) {
-    		System.out.println("SQLException: "+e.getMessage());
-			System.out.println("SQLState: "+e.getSQLState());
-			System.out.println("VendorError: "+e.getErrorCode());
-		}
-    }
+	    	catch (SQLException e) {
+	    		System.out.println("SQLException: "+e.getMessage());
+				System.out.println("SQLState: "+e.getSQLState());
+				System.out.println("VendorError: "+e.getErrorCode());
+			}
+	    }
+	
     protected void messageContent(boolean succeded){
     	
     }
